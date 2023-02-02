@@ -47,12 +47,23 @@ Skill Hard
 {
    AmmoFactor = 1
    DamageFactor = 1.0
- //  Aggressiveness = .10
    SpawnFilter = Hard
    Textcolor = Yellow
    //DisableCheats
    Name = "Brutal"
    MustConfirm = "The true Project Brutality experiece. Press Y to Continue or N to Select Other Skill."
+}
+
+Skill VeryHard
+{
+   AmmoFactor = 1
+   DamageFactor = 1.0
+   MonsterHealth = 1.25
+   SpawnFilter = Hard
+   Textcolor = Yellow
+   //DisableCheats
+   Name = "More Brutal"
+   MustConfirm = "More monster health. Press Y to Continue or N to Select Other Skill."
 }
 
 Skill Brutal
@@ -65,7 +76,6 @@ Skill Brutal
    Textcolor = "Orange"
    Name = "Man and a Half"
    MustConfirm = "Your enemies are significantly more aggressive, inflict more damage, and are very proficient. Press Y to Continue or N to Select Other Skill."
-
 }
 
 Skill Superbad
