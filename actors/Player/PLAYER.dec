@@ -542,9 +542,9 @@ ACTOR Doomer : PlayerPawnBase Replaces DoomPlayer
 	Player.StartItem "PrimaryPistolAmmo", 16
 	Player.StartItem "SecondaryPistolAmmo", 16
 	Player.StartItem "PistolBullets", 60
-	Player.StartItem "ShotgunAmmo", 9
-	Player.StartItem "AutoShotgunAmmo", 12
-	Player.StartItem "LeftASGAmmo",12
+	Player.StartItem "ShotgunAmmo", 8
+	Player.StartItem "AutoShotgunAmmo", 7
+	Player.StartItem "LeftASGAmmo",7
 	Player.StartItem "RevolverAmmo", 6
 	Player.StartItem "LeftRevolverAmmo", 6
 	Player.StartItem "SSGAmmoCounter", 2
@@ -569,8 +569,8 @@ ACTOR Doomer : PlayerPawnBase Replaces DoomPlayer
 	Player.StartItem "HellAmmo", 60
 	Player.StartItem "GrenadeRounds", 7
 //	Player.StartItem "PulseCannonAmmo", 60
-	Player.StartItem "DeagleAmmo", 12
-	Player.StartItem "LeftDeagleAmmo", 12
+	Player.StartItem "DeagleAmmo", 8
+	Player.StartItem "LeftDeagleAmmo", 8
 	Player.StartItem "ChexRifleAmmo", 42
 	Player.StartItem "CryoRifleAmmo", 60
 	Player.StartItem "HasBuckShot", 1 //Added for proper SG ammo type sorting
