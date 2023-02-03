@@ -24,6 +24,7 @@ Actor IsBFGCellAmmo : AmmoCounter { }
 Actor IsBlackHoleCellAmmo : AmmoCounter {}
 
 Actor ISNearBlackHoleGen : AmmoCounter { }
+Actor ISNearUnmaker : AmmoCounter { }
 Actor IsNearBFG : AmmoCounter { }
 Actor IsNearPlasmaWeapon : AmmoCounter { }
 
@@ -31,7 +32,6 @@ Actor IsNearPlasmaWeapon : AmmoCounter { }
 Actor IsRocketAmmo : AmmoCounter { }
 Actor IsSpecialGrenadeAmmo : AmmoCounter { }
 Actor IsExcavatorAmmo : AmmoCounter { }
-//Actor IsHEGrenadeAmmo : AmmoCounter {}
 Actor IsComboBoxAmmo : AmmoCounter {}
 
 Actor MustBeRocketBoxes : AmmoCounter { }	//Special Exceptions to prevent large clumps of things from becoming the rare subtypes
