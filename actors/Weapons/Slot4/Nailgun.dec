@@ -31,9 +31,9 @@ Inventory.MaxAmount 1
 ACTOR PB_NailgunAmmo : Ammo
 {
    Inventory.Amount 0
-   Inventory.MaxAmount 120
+   Inventory.MaxAmount 180
    Ammo.BackpackAmount 0
-   Ammo.BackpackMaxAmount 120
+   Ammo.BackpackMaxAmount 180
    +INVENTORY.IGNORESKILL
    Inventory.Icon "NLMGF0"
 }
@@ -59,7 +59,7 @@ Weapon.BobSpeed 2.4
 //Weapon.SelectionOrder 2800
 Weapon.AmmoType1 "NewClip"
 Weapon.AmmoType2 "PB_NailgunAmmo"
-Weapon.AmmoGive 30
+Weapon.AmmoGive 40
 Weapon.AmmoUse1 0
 Weapon.AmmoUse2 0
 	+FLOORCLIP
@@ -281,7 +281,7 @@ Steady:
         N1N0 ABCD 1 {
 			if (CountInv("JavelinMode") == 1 ) {A_SetWeaponSprite("J0N0");}
 			if (CountInv("PB_NailgunAmmo") == 0 ) {A_SetWeaponSprite("N1N1");}
-			if (CountInv("PB_NailgunAmmo") < 20 && CountInv("JavelinMode") == 1) {A_SetWeaponSprite("J0N1");}
+			if (CountInv("PB_NailgunAmmo") < 15 && CountInv("JavelinMode") == 1) {A_SetWeaponSprite("J0N1");}
 			if (CountInv("NailgunHasUnloaded") == 1) {A_SetWeaponSprite("N1N2");}
 			if (CountInv("NailgunHasUnloaded") ==1 && CountInv("JavelinMode") == 1) { A_SetWeaponSprite("J0N2"); }
 			}
@@ -512,7 +512,7 @@ Steady:
 			A_FireCustomMissile("GunFireSmoke", 0, 0, 2, -8, 0, 0);
 			A_Giveinventory("NailgunFiringAnimation",1);
 			A_Giveinventory("NailgunOverHeating",2);
-			A_Takeinventory("PB_NailgunAmmo",1);
+			A_Takeinventory("PB_NailgunAmmo",2);
 			A_GunFlash;
 			A_ZoomFactor(0.995);
             PB_WeaponRecoil(-0.52,-0.12);
@@ -534,7 +534,7 @@ Steady:
 			A_FireCustomMissile("GunFireSmoke", 0, 0, -2, -8, 0, 0);
 			A_Giveinventory("NailgunOverHeating",2);
 			A_Takeinventory("NailgunFiringAnimation",1);
-			A_Takeinventory("PB_NailgunAmmo",1);
+			A_Takeinventory("PB_NailgunAmmo",2);
 			A_GunFlash;
 			A_ZoomFactor(0.995);
             PB_WeaponRecoil(-0.52,-0.12);
@@ -574,7 +574,7 @@ Steady:
 			A_FireCustomMissile("GunFireSmoke", 0, 0, 2, -8, 0, 0);
 			A_Giveinventory("NailgunOverHeating",2);
 			A_Giveinventory("NailgunFiringAnimation",1);
-			A_Takeinventory("PB_NailgunAmmo",1);
+			A_Takeinventory("PB_NailgunAmmo",2);
 			A_ZoomFactor(0.995);
 			A_GunFlash;
             PB_WeaponRecoil(-0.52,-0.12);
@@ -603,7 +603,7 @@ Steady:
 			A_FireCustomMissile("GunFireSmoke", 0, 0, -2, -8, 0, 0);
 			A_Giveinventory("NailgunOverHeating",2);
 			A_Takeinventory("NailgunFiringAnimation",1);
-			A_Takeinventory("PB_NailgunAmmo",1);
+			A_Takeinventory("PB_NailgunAmmo",2);
 			A_ZoomFactor(0.995);
 			A_GunFlash;
             PB_WeaponRecoil(-0.52,-0.12);
@@ -654,7 +654,7 @@ Steady:
 			A_FireCustomMissile("GunFireSmoke", 0, 0, -2, -8, 0, 0);
 			A_FireCustomMissile("GunFireSmoke", 0, 0, 2, -8, 0, 0);
 			A_FireCustomMissile("Alerter", 0, 0, 0, 0);
-			A_Takeinventory("PB_NailgunAmmo",10);
+			A_Takeinventory("PB_NailgunAmmo",20);
 			A_ZoomFactor(0.98);
 			A_StartSound("weapons/nailgun/altfire", CHAN_AUTO);
 			A_GunFlash;
@@ -678,7 +678,7 @@ Steady:
 		Goto Ready3
 	
 	FireJavelin:
-		TNT1 A 0 A_JumpIfInventory("PB_NailgunAmmo",20,1)
+		TNT1 A 0 A_JumpIfInventory("PB_NailgunAmmo",15,1)
         Goto Reload
 		J1N0 A 1 {
 			A_FireCustomMissile("JavelinProjectile", 0, 0, 0, 0, 0, 0);
@@ -686,7 +686,7 @@ Steady:
 			A_FireCustomMissile("GunFireSmoke", 0, 0, 0, -8, 0, 0);
 			A_FireCustomMissile("GunFireSmoke", 0, 0, 0, -8, 0, 0);
 			A_FireCustomMissile("Alerter", 0, 0, 0, 0);
-			A_Takeinventory("PB_NailgunAmmo",10);
+			A_Takeinventory("PB_NailgunAmmo",15);
 			A_ZoomFactor(0.985);
 			A_StartSound("weapons/nailgun/javelinfire", CHAN_AUTO);
 			A_GunFlash;
@@ -701,7 +701,7 @@ Steady:
             PB_WeaponRecoil(-2.5,+0.2);
 		}
 		J1N0 DEF 1 
-		TNT1 A 0 A_JumpIfInventory("PB_NailgunAmmo",10,1)
+		TNT1 A 0 A_JumpIfInventory("PB_NailgunAmmo",15,1)
 		Goto JavelinReady3
 		J1N0 GHIJKLMN 1
 		TNT1 A 0 A_StartSound("weapons/nailgun/inspect2", CHAN_AUTO)
@@ -714,7 +714,7 @@ Steady:
 		Goto JavelinReady3
 		
 	AltFireJavelin:
-		TNT1 A 0 A_JumpIfInventory("PB_NailgunAmmo",10,1)
+		TNT1 A 0 A_JumpIfInventory("PB_NailgunAmmo",20,1)
         Goto Reload
 		TNT1 A 0 A_StartSound("weapons/nailgun/javelincharge", CHAN_WEAPON)
 		J3N0 ABCDEFABCDEFGHIJKLMKLMNOPNOPQRSTU 1
@@ -739,7 +739,7 @@ Steady:
             PB_WeaponRecoil(-2.5,+0.2);
 		}
 		J3N0 YZ 1
-		TNT1 A 0 A_JumpIfInventory("PB_NailgunAmmo",10,1)
+		TNT1 A 0 A_JumpIfInventory("PB_NailgunAmmo",30,1)
 		Goto JavelinReady3
 		J3N1 ABCDEFGH 1
 		TNT1 A 0 A_StartSound("weapons/nailgun/inspect2", CHAN_AUTO)
@@ -759,7 +759,7 @@ Steady:
         Goto Ready3
         J0N1 D 10 {
 			A_PlaySound("weapons/empty");
-			if (CountInv("PB_NailgunAmmo") >= 10) { A_SetWeaponSprite ("J0N0"); }
+			if (CountInv("PB_NailgunAmmo") >= 15) { A_SetWeaponSprite ("J0N0"); }
 		}
         Goto JavelinReady3
 	
@@ -865,11 +865,9 @@ Steady:
 		N9N4 ABCDEFGHIJKL 1
 		Goto InsertBullets
 		
-		
-		
 	InsertBullets:
         TNT1 A 0 A_Takeinventory("NailgunHasUnloaded",1)
-		TNT1 A 0 A_JumpIfInventory("PB_NailgunAmmo",120,"Ready3")
+		TNT1 A 0 A_JumpIfInventory("PB_NailgunAmmo", 120, "Ready3")
 		TNT1 A 0 A_JumpIfInventory("NewClip",1,1)
 		Goto Ready3
 		TNT1 A 0 {
@@ -883,7 +881,7 @@ Steady:
         TNT1 A 0 {
 			//Smart Check Inventory
 			if (CountInv("NailgunHasUnloaded") == 1) { return state("ReloadJavelinContinuedFromUnloaded"); }
-			if (((CountInv("PB_NailgunAmmo") < 20) && (CountInv("NewClip")) >= 20)) { return state("ReloadJavelinContinuedFromEmpty"); }
+			if (((CountInv("PB_NailgunAmmo") < 15) && (CountInv("NewClip")) >= 15)) { return state("ReloadJavelinContinuedFromEmpty"); }
 			if ((CountInv("PB_NailgunAmmo")+CountInv("NewClip")) >= 20) { return state("ReloadJavelinContinued"); }
 			return state("");
 		}
