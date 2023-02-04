@@ -724,7 +724,7 @@ Steady:
 			A_FireCustomMissile("GunFireSmoke", 0, 0, 0, -8, 0, 0);
 			A_FireCustomMissile("GunFireSmoke", 0, 0, 0, -8, 0, 0);
 			A_FireCustomMissile("Alerter", 0, 0, 0, 0);
-			A_Takeinventory("PB_NailgunAmmo",10);
+			A_Takeinventory("PB_NailgunAmmo",20);
 			A_ZoomFactor(0.985);
 			A_StartSound("weapons/nailgun/javelinfire", CHAN_WEAPON);
 			A_GunFlash;
