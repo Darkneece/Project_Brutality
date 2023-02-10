@@ -31,9 +31,9 @@ Inventory.MaxAmount 1
 ACTOR PB_NailgunAmmo : Ammo
 {
    Inventory.Amount 0
-   Inventory.MaxAmount 180
+   Inventory.MaxAmount 120
    Ammo.BackpackAmount 0
-   Ammo.BackpackMaxAmount 180
+   Ammo.BackpackMaxAmount 120
    +INVENTORY.IGNORESKILL
    Inventory.Icon "NLMGF0"
 }
@@ -512,7 +512,7 @@ Steady:
 			A_FireCustomMissile("GunFireSmoke", 0, 0, 2, -8, 0, 0);
 			A_Giveinventory("NailgunFiringAnimation",1);
 			A_Giveinventory("NailgunOverHeating",2);
-			A_Takeinventory("PB_NailgunAmmo",2);
+			A_Takeinventory("PB_NailgunAmmo",1);
 			A_GunFlash;
 			A_ZoomFactor(0.995);
             PB_WeaponRecoil(-0.52,-0.12);
@@ -534,7 +534,7 @@ Steady:
 			A_FireCustomMissile("GunFireSmoke", 0, 0, -2, -8, 0, 0);
 			A_Giveinventory("NailgunOverHeating",2);
 			A_Takeinventory("NailgunFiringAnimation",1);
-			A_Takeinventory("PB_NailgunAmmo",2);
+			A_Takeinventory("PB_NailgunAmmo",1);
 			A_GunFlash;
 			A_ZoomFactor(0.995);
             PB_WeaponRecoil(-0.52,-0.12);
@@ -574,7 +574,7 @@ Steady:
 			A_FireCustomMissile("GunFireSmoke", 0, 0, 2, -8, 0, 0);
 			A_Giveinventory("NailgunOverHeating",2);
 			A_Giveinventory("NailgunFiringAnimation",1);
-			A_Takeinventory("PB_NailgunAmmo",2);
+			A_Takeinventory("PB_NailgunAmmo",1);
 			A_ZoomFactor(0.995);
 			A_GunFlash;
             PB_WeaponRecoil(-0.52,-0.12);
@@ -603,7 +603,7 @@ Steady:
 			A_FireCustomMissile("GunFireSmoke", 0, 0, -2, -8, 0, 0);
 			A_Giveinventory("NailgunOverHeating",2);
 			A_Takeinventory("NailgunFiringAnimation",1);
-			A_Takeinventory("PB_NailgunAmmo",2);
+			A_Takeinventory("PB_NailgunAmmo",1);
 			A_ZoomFactor(0.995);
 			A_GunFlash;
             PB_WeaponRecoil(-0.52,-0.12);
@@ -654,7 +654,7 @@ Steady:
 			A_FireCustomMissile("GunFireSmoke", 0, 0, -2, -8, 0, 0);
 			A_FireCustomMissile("GunFireSmoke", 0, 0, 2, -8, 0, 0);
 			A_FireCustomMissile("Alerter", 0, 0, 0, 0);
-			A_Takeinventory("PB_NailgunAmmo",20);
+			A_Takeinventory("PB_NailgunAmmo",10);
 			A_ZoomFactor(0.98);
 			A_StartSound("weapons/nailgun/altfire", CHAN_AUTO);
 			A_GunFlash;
