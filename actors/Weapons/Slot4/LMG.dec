@@ -820,9 +820,9 @@ States
 		TNT1 A 0 A_Overlay(-3, "BeltFireBulletZoom")
 		TNT1 A 0 {
 			if (CountInv("LMGAPAmmo") == 0) {
-				A_FireBullets (0.1, 0.1, -1, 25, "MachineGunBulletPuff", FBF_NORANDOM,8192,"Tracer", -2,0);
+				A_FireBullets (0.1, 0.1, -1, 15, "MachineGunBulletPuff", FBF_NORANDOM,8192,"Tracer", -2,0);
 			} else {
-				A_FireBullets (0.05, 0.05, -1, 32, "MachineGunBulletPuff", FBF_NORANDOM,8192,"Tracer", -2,0);
+				A_FireBullets (0.05, 0.05, -1, 25, "MachineGunBulletPuff", FBF_NORANDOM,8192,"Tracer", -2,0);
 			}
 		}
 //		TNT1 A 0 A_Firecustommissile("LMGCaseSpawnStandard",0,0,24,-20, 0, -50)
