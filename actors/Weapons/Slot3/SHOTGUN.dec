@@ -972,7 +972,7 @@ ACTOR PB_Shotgun : PB_Weapon Replaces Shotgun
 		      A_FireBullets(frandom(5.85,6.65), frandom(5.32,6.75),8,0,"None",FBF_NORANDOM,8192,"DragonsBreathTracer",-14,0);
 		       return state("FireAnimBegin");}
 		  A_PlaySoundEx("weapons/sg", "Weapon");
-		  A_FireBullets(frandom(4.85,5.65), frandom(4.32,5.75),10,14,"ShotgunPuff",FBF_NORANDOM); 
+		  A_FireBullets(frandom(2.85,4.65), frandom(2.32,4.75),10,14,"ShotgunPuff",FBF_NORANDOM); 
 		  return state("FireAnimBegin");
 		}
 		"####" B 1
@@ -1166,7 +1166,7 @@ ACTOR PB_Shotgun : PB_Weapon Replaces Shotgun
 			}
 		 else {
 			  A_PlaySoundEx("weapons/sg", "Weapon");    
-			  A_FireBullets(frandom(4.1,4.86), frandom(3.57,5),10,14,"ShotgunPuff",FBF_NORANDOM);
+			  A_FireBullets(frandom(2.1,2.86), frandom(2.57,3),10,14,"ShotgunPuff",FBF_NORANDOM);
 		  return state("");
 		  }
 		}
