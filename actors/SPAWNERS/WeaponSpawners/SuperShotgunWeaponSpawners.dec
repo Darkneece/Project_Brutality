@@ -32,6 +32,7 @@ Actor SSGWeaponSpawner replaces SuperShotgun
 	DiceProg:	// Progressive spawn preset enforces strict spawning rules by excluding monsters until they are presented in later levels.
 		DiceTier1:
 		DiceTier2:
+			TNT1 A 0 A_Jump(8,"SpawnQuadSSG")
 			TNT1 A 0 A_Jump(256,"SpawnSSG")
 		DiceTier3:
 			TNT1 A 0 A_Jump(12,"SpawnQuadSSG", "SpawnASGDrumMag")
