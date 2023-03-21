@@ -559,8 +559,8 @@ ACTOR Doomer : PlayerPawnBase Replaces DoomPlayer
 	Player.StartItem "IsPlayer", 1
 	Player.StartItem "SMGAmmo", 51
 	Player.StartItem "LeftSMGAmmo", 51
-	Player.StartItem "XRifleAmmo", 41
-	Player.StartItem "LeftXRifleAmmo", 41
+	Player.StartItem "XRifleAmmo", 26
+	Player.StartItem "LeftXRifleAmmo", 26
 	Player.StartItem "LMGAmmo", 75
 	Player.StartItem "M2PlasmaAmmo", 50
 	Player.StartItem "LeftM2PlasmaAmmo", 50
@@ -568,7 +568,6 @@ ACTOR Doomer : PlayerPawnBase Replaces DoomPlayer
 	Player.StartItem "LeftMP40Ammo", 32
 	Player.StartItem "HellAmmo", 60
 	Player.StartItem "GrenadeRounds", 7
-//	Player.StartItem "PulseCannonAmmo", 60
 	Player.StartItem "DeagleAmmo", 8
 	Player.StartItem "LeftDeagleAmmo", 8
 	Player.StartItem "ChexRifleAmmo", 42
@@ -576,7 +575,6 @@ ACTOR Doomer : PlayerPawnBase Replaces DoomPlayer
 	Player.StartItem "HasBuckShot", 1 //Added for proper SG ammo type sorting
 	Player.StartItem "FragGrenadeSelected", 1
 	Player.StartItem "HandGrenadeAmmo", 3
-	Player.StartItem "MiniHellRocketAmmo", 4
 	Player.StartItem "IsPlayingAsProjectBrutality", 1
 	Player.StartItem "FlamerAmmo", 90
 	Player.JumpZ 7.4
