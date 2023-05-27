@@ -21,7 +21,7 @@ SEESOUND "wizard/sight"
 painsound "wizard/pain"
 deathsound "wizard/death"
 activesound "wizard/active"
-DropItem "DemonStrengthRune" 7
+
 	DropItem "HasteSphere" 7
 	DropItem "DoubleSphere" 7
 	DropItem "Demonpickup2" 255
@@ -355,7 +355,6 @@ actor WizardBall
   Death:
     LMBW CDE 4 bright A_SpawnItem("RedFlare",0,0)
 	EXPL A 0 A_SpawnItem("ExplosionParticleSpawner")
-		TNT1 A 0 A_SpawnItemEx ("SmallUnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
 	    EXPL AAAAAA 0 A_CustomMissile ("FireBallExplosionFlames", 1, 0, random (0, 360), 2, random (0, 360))
 	TNT1 AAAAA 0 A_CustomMissile ("PlasmaSmoke", 1, 0, random (0, 360), 2, random (0, 160))
     stop
@@ -377,7 +376,7 @@ actor FatalizedFleshWizard
 
 Actor Vanilla_FleshWizard : PB_FleshWizard
 {
-	DropItem "DemonStrengthRune" 5
+	
 	States
 	{
 		Spawn:

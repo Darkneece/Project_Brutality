@@ -22,6 +22,40 @@
 #include "models/nashgore/Footprint/_materials.txt"
 #include "GLDEFS.Overlord" //For the Overlord projectiles, to prevent this file from being flooded
 
+pulselight M1HeatWave
+{
+    color 0.0 0.1 1.0
+    Size 256
+	SecondarySize 400
+    interval 36
+}
+
+pulselight  BlackholeVoid
+{
+    Color 1.0 1.0 1.0
+	Subtractive 1
+	Size 256
+	SecondarySize 400
+    interval 36
+}
+
+pulselight BlackholeBallSmall
+{
+    color 1.0 0.0 1.0
+    size 109
+	SecondarySize 192
+    interval 12
+}
+
+
+pulselight BlackholeBall
+{
+    color 1.0 0.0 1.0
+    size 150
+	SecondarySize 300
+    interval 6
+}
+
 flickerlight2 FT_GroundFire
 {
     color 1.0 0.6 0.0
@@ -42,10 +76,21 @@ flickerlight2 TinyBurningPiece
 }
 
 
+pointlight BFGBALL
+{
+    color 0.0 1.0 0.0
+    size 256
+}
+
+pointlight BFGALT
+{
+    color 0.0 1.0 0.0
+    size 96
+}
 
 
 // New PB Imp Fireball
-flickerlight PB_IMPBALL
+pointlight PB_IMPBALL
 {
     color 1.0 0.5 0.0
     size 64
@@ -263,9 +308,16 @@ pulselight TracerLight
 
 pointlight DemonTechImpact
 {
-    color 1.0 0.3 0.0
+    color 1.0 0.0 0.0
     size 64
 }
+
+pointlight DemonTechFire
+{
+    color 1.0 0.0 0.0
+    size 25
+}
+
 
 flickerlight2 IncinerationGlow
 {
@@ -578,6 +630,11 @@ pulselight FIREBARREL
 }
 
 // Skulls w/candles
+pointlight HUEHUESMALL
+{
+    color 0.5 0.4 0
+    size 28
+}
 
 pointlight HUEHUE
 {
@@ -734,7 +791,7 @@ object PB_Sergeant
 
 
 // Doom Imp Fireball
-flickerlight IMPBALL
+pointlight IMPBALL
 {
     color 1.0 0.5 0.0
     size 64
@@ -2124,12 +2181,6 @@ pointlight PulseC
 	dontlightself 1
 }
 
-/*
-object PB_Pulsecannon
-{
-	frame PLCU { light PulseC }
-}
-*/
 pOINTlight BIGORANGELAMP
 {
     color 1.0 0.5 0.0
