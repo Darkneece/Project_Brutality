@@ -1415,7 +1415,13 @@ if (players[consoleplayer].ReadyWeapon == NULL)
 			{
 				if(wheelShow.Size()>0)
 				{
-					int curSelMod = wheelShow[currentSelection];
+					int curSelMod;
+					if (currentSelection >= wheelShow.Size()) {
+						curSelMod = wheelShow[0];
+					} else {
+						curSelMod = wheelShow[currentSelection];
+					}
+
 					players[consoleplayer].mo.A_GiveInventory(wheelSpecials[curSelMod].specialName);
 					players[consoleplayer].mo.A_GiveInventory("GoWeaponSpecialAbility");
 					S_StartSound("menu/choose",5);
