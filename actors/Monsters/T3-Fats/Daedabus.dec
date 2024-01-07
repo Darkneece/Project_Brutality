@@ -12,12 +12,12 @@ Actor DaedabusSwitchModeEffect
 
 
 
-Actor PB_Daedabus replaces Fatso
+Actor PB_Daedabus //replaces Fatso
 {
 	//$Title Daedalus
 	//$Category Project Brutality - Monsters/Mancubi
 	//$Sprite DAEDB1
-	Health 850
+	Health 1000
 	Radius 48
 	Height 64
 	Scale 1.2
@@ -32,8 +32,7 @@ Actor PB_Daedabus replaces Fatso
 	PainChance "Stun", 255
 	PainChance "Kick", 255
 	PainChance "ExtremePunches", 225
-	PainChance "Taunt", 255
-	PainChance "Explosive", 255
+	PainChance "Explosive", 96
 	PainChance 40
 	BloodType "brutal_Blood"
 	SeeSound "Daedabus/Sight"
@@ -44,8 +43,8 @@ Actor PB_Daedabus replaces Fatso
 	damagefactor "HEAD", 3
 	damagefactor "TeleportRemover", 0.0
 	
-	DropItem "HasteSphere" 4
-	DropItem "DoubleSphere" 4
+	DropItem "PB_Haste" 4
+	DropItem "PB_DoomSphere" 4
 	Species "BigFatAss"
 	+DONTHARMSPECIES
 	+DONTHARMCLASS
@@ -61,6 +60,17 @@ Actor PB_Daedabus replaces Fatso
 	
    States
    {
+   Death.Execution:
+		TNT1 A 0 {
+ 			A_Stopsound;
+			A_FaceTarget;
+			A_NoBlocking;
+		}
+		DAED AG 4 
+		TNT1 A 0 A_Pain
+		DAED J 21
+		TNT1 A 0 A_Recoil(4)
+		Goto XDeath
    
    Death.Blackhole:
 	    TNT1 A 0 A_BossDeath
@@ -1714,7 +1724,7 @@ Actor DeadDaedabusDAT5J: DEADDAEDABUSHEAD
 
 ///////////////////////////======VANILLA======//////////////////////////////////
 
-Actor Vanilla_Daedabus : PB_Daedabus Replaces Fatso
+Actor Vanilla_Daedabus : PB_Daedabus //replaces Fatso
 {
 	
 	States

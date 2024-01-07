@@ -160,7 +160,7 @@ Graphic "HUDBOT2F", 289, 139
 	}
 }
 
-Graphic "HUDT2O2", 466, 211 //naming convention be damned, i'm running out of names here
+Graphic "HUDTP2O2", 466, 211 //naming convention be damned, i'm running out of names here
 {
 	Patch "HUDTPOF2", 0, 0
 	{
@@ -207,3 +207,17 @@ Graphic "HUDBFLA2", 289, 139
 		FlipX
 	}
 }
+
+//HDMR missing Z frames for unloading
+Sprite "H11FZ0", 427, 200
+{
+	Offset 53, 32
+	Patch "H11FY0", 0, 0
+}
+
+Sprite "H31FZ0", 427, 200
+{
+	Offset 53, 32
+	Patch "H31FY0", 0, 0
+}
+

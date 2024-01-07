@@ -67,10 +67,8 @@ Actor IsTacticalClass : Inventory {} //Fake item to fix the lag.
 #include "actors/Items/Ammo/Cellpack.dec"
 
 //Powerups
-#include "actors/Items/Powerups/GenericPowerups.dec"
-#include "actors/Items/Powerups/SpecialPowerups.dec"
-#include "actors/Items/Powerups/Backpacks.dec"
-#include "actors/Items/Powerups/Healthbackpacks.dec"
+#include "actors/Items/SpecialPowerups.dec"
+#include "actors/Items/GenericHealth.dec"
 
 //DECORATIONS
 //#include "actors/Decorations/FURNITURE.dec"
@@ -111,13 +109,13 @@ Actor IsTacticalClass : Inventory {} //Fake item to fix the lag.
 #include "actors/Monsters/T4-Viles/ARCHVILE.dec"
 #include "actors/Monsters/Tz-Bosses/CYBERDEMON.dec"
 #include "actors/Monsters/Tz-Bosses/MASTERMIND.dec"
-#include "actors/Monsters/Tz-Bosses/FixedBossBrain.txt" //For maps that have the player telefrag the bossbrain
 
 //ST Monsters
 #include "actors/Monsters/T4-Nobles/BELPHEGOR.dec"
 #include "actors/Monsters/Tz-Bosses/JUGGERNAUT.dec"
 
 //Frozen Monsters
+#include "actors/Monsters/TZ-Frozen/ZombieFreezes.dec"
 #include "actors/Monsters/TZ-Frozen/BossFreezes.dec"
 #include "actors/Monsters/TZ-Frozen/CommandoFreezes.dec"
 #include "actors/Monsters/TZ-Frozen/DemonFreezes.dec"
@@ -129,7 +127,6 @@ Actor IsTacticalClass : Inventory {} //Fake item to fix the lag.
 #include "actors/Monsters/TZ-Frozen/VileFreezes.dec"
 #include "actors/Monsters/TZ-Frozen/RevenantFreezes.dec"
 #include "actors/Monsters/TZ-Frozen/SergeantFreezes.dec"
-#include "actors/Monsters/TZ-Frozen/ZombieFreezes.dec"
 
 //Gore N' Blood
 #include "actors/Gore/GORE!!!.dec"
@@ -196,7 +193,6 @@ Actor IsTacticalClass : Inventory {} //Fake item to fix the lag.
 
 #include "actors/Monsters/T1-Grunts/PB_NailgunMajor.dec"
 #include "actors/Monsters/T1-Grunts/PlasmaZombie.dec"
-#include "actors/Monsters/T1-Grunts/ClassicCommando.dec"
 #include "actors/Monsters/T1-Grunts/HelmetCommando.dec"
 
 #include "actors/Monsters/T3-Floaters/Watcher.dec"
@@ -213,9 +209,6 @@ Actor IsTacticalClass : Inventory {} //Fake item to fix the lag.
 #include "actors/Monsters/T3-Revies/Draugr.dec"
 
 #include "actors/Monsters/T4-Viles/Hellion.dec"
-#include "actors/Monsters/T4-Viles/FleshWizard.dec"
-#include "actors/Monsters/T4-Viles/IceVile.dec"
-#include "actors/Monsters/T4-Viles/IceImps.dec"
 
 #include "actors/Monsters/T3-Arachnos/InfernalArachnotron.dec"
 #include "actors/Monsters/T3-Arachnos/Arachnophyte.dec"
@@ -229,7 +222,6 @@ Actor IsTacticalClass : Inventory {} //Fake item to fix the lag.
 
 #include "actors/Monsters/T3-Floaters/Phantasm.dec"
 #include "actors/Monsters/T3-Floaters/SufferingElemental.dec"
-#include "actors/Monsters/T3-Floaters/Overlord.dec"
 #include "actors/Monsters/T4-Nobles/CyberBaron.dec"
 #include "actors/Monsters/T4-Nobles/Infernus.dec"
 #include "actors/Monsters/T4-Nobles/DyingBruiser.dec"
@@ -313,12 +305,6 @@ Actor IsTacticalClass : Inventory {} //Fake item to fix the lag.
 
 #include "actors/Spawners/SpawnerScript.dec"
 
-//Smart Scavenger Health
-#include "actors/Items/Health/GenericHealth.dec"
-#include "actors/Items/Health/Stimpack.dec"
-#include "actors/Items/Health/Medikit.dec"
-#include "actors/Items/Health/Medipack.dec"
-
 
 actor Z_FloorCheck
 {
@@ -347,19 +333,6 @@ inventory.maxamount 1
 Actor CantFire : Inventory
 {
 inventory.maxamount 1
-}
-
-ACTOR NewRadSuit : RadSuit Replaces RadSuit
-{
-	Inventory.PickUpSound "misc/radsuit_PickUp"
-	+FLOORCLIP
-	+DONTGIB
-	States
-  	{
-  	Spawn:
-		SUIT A 2
-    	Loop
-  	}
 }
 
 ACTOR PowerNoBloodDamage : PowerProtection
