@@ -8,7 +8,10 @@ Actor UpgradeSpawner
 	+DONTGIB
 	States
 	{
+	
 	Spawn:
+		
+		
 		TNT1 A 1 ACS_NamedExecuteAlways("ToggleUpgrades", 0, 0, 0, 0)//Check if Upgrades are disabled
 		TNT1 A 1 A_Jump(256, "SpawnFlamerUpgrade", "SpawnLMG", "SpawnQuadSSG", "SpawnPB_AutoshotgunUpgrade", "SpawnPB_MinigunUpgrade", "SpawnDragonBreathUpgrade", "SpawnPB_UnmakerUpgrade", "SpawnM2Upgrade", "SpawnDeagle", "SpawnRifleUpgrade")
 		TNT1 A 0

@@ -1,4 +1,4 @@
-version "4.8.2"
+version "4.11"
 
 const MAXITERATIONS = 32676;
 
@@ -9,9 +9,11 @@ const MAXITERATIONS = 32676;
 #include "zscript/PBCore.zsc"
 #include "zscript/MathNMixins.zsc"
 #include "zscript/PBHandler.zc"
-#include "zscript/PBPDA.zc"
+//#include "zscript/PBPDA.zc"
 #include "zscript/PB_Hud.zs"
+#include "zscript/PB_Hud_FX.zs"
 #include "zscript/PB_HudMessages.zs"
+#include "zscript/PB_StatScreen.zs"
 #include "zscript/Player/PlayerPawn.zc"
 #include "zscript/Player/ZSPlayer.zsc"
 #include "zscript/PlayerStats/GlobalStats.zsc"
@@ -100,6 +102,8 @@ const MAXITERATIONS = 32676;
 #include "zscript/Effects/IceShards.txt"
 #include "zscript/Effects/BulletPuffs.txt"
 #include "zscript/Effects/Smoke.zs"
+#include "zscript/Effects/FxBase.zs"
+#include "zscript/Effects/MonsterBeam.zs"
 
 //Weapons
 #include "zscript/Weapons/BaseWeapon.zc"
@@ -118,6 +122,7 @@ const MAXITERATIONS = 32676;
 #include "zscript/Weapons/Projectiles/BulletDef.SpecialProjectiles.zsc"
 #include "zscript/Weapons/Projectiles/BulletDef.EnemyProjectiles.zsc"
 #include "zscript/Weapons/Projectiles/RailGunPj.zs"
+#include "zscript/Weapons/Projectiles/DragonsBreath.zs"
 
 //Spawners
 #include "zscript/Spawner/PB_SpawnerBase.zc"

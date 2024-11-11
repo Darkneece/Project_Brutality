@@ -1,7 +1,23 @@
-//Adapted from Flashlight++, available at https://forum.zdoom.org/viewtopic.php?t=75585
+/* Flashlight++, an extended version of Flashlight+ with extra customizability.
+Copyright (C) 2024  generic name guy
 
-//Light
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>. */
+
+// Modified version of Flashlight++, available at https://forum.zdoom.org/viewtopic.php?t=75585
+// Adapted for Project Brutality by generic name guy
+
+// Light
 class PB_FPP_Light : Spotlight
 {
 	Default 
@@ -21,7 +37,7 @@ class PB_FPP_Light : Spotlight
 	const spInnerAngle = 35.0;
 	const spOuterAngle = 40.0;
 	
-	const sp2Intensity = 584.0;
+	const sp2Intensity = /*584.0*/ 256.0;
 	const sp2InnerAngle = 0.0;
 	const sp2OuterAngle = 30.0;
 	
@@ -38,7 +54,7 @@ class PB_FPP_Light : Spotlight
 		
 		if(second) {
 			baseColor = beamColor;
-			bNOSHADOWMAP = true;
+			//bNOSHADOWMAP = true;
 		}
 		else {
 			fCol = beamColor;
@@ -111,8 +127,7 @@ class PB_FPP_Light : Spotlight
 	}
 }
 
-//Holder
-
+// Holder
 class PB_FPP_Holder : Inventory 
 {
 	PB_FPP_Light light1;
@@ -359,8 +374,7 @@ class PB_FPP_Holder : Inventory
 	}
 }
 
-//Handler
-
+// Handler
 extend class PB_EventHandler
 {
 	PB_FPP_Holder setupFlashlightHolder(PlayerPawn p)
@@ -369,4 +383,4 @@ extend class PB_EventHandler
 		holder.Init();
 		return holder;
 	}
-}
+}

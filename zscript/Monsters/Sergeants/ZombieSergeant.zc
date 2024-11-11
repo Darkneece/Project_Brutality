@@ -7,15 +7,14 @@ Class PB_ShotgunGuy : PB_Monster
 		//$Sprite SHIDA1
 		Monster;
 		Radius 16;
-		Height 54;
-		Speed 8;
+		Height 56;
+		Speed 4;
 		FastSpeed 8;
 		Mass 100;
 		SeeSound "monsters/zombie/see";
 		PainSound "monsters/zombie/pain";
 		DeathSound "monsters/zombie/death";
 		ActiveSound "monsters/zombie/searching";
-		BloodType "NashGoreBlood", "NashGoreBlood", "NashGoreBlood";
 		Health 90;
 		PainChance 200;
 		PainChance "Avoid", 200;
@@ -57,6 +56,7 @@ Class PB_ShotgunGuy : PB_Monster
 		Species "Former_Human";
 		
 		PB_Monster.AttackRange 1000;
+		PB_Monster.PBMonSpeed 4, 3, 1.5, 2;
 	}
 		
 	int movement_direction;
@@ -67,7 +67,7 @@ Class PB_ShotgunGuy : PB_Monster
 		For (Int I = 4; I > 0; I--)
 		{
 			//console.printf ("DEBUG: Shotgunner fired %d bullets",I);
-			A_SpawnProjectile("MonsterTracer", BulletHeight, 0, random(-6, 6), 1, random(-4, 4));
+			A_SpawnProjectile("PB_ShotPellet12", BulletHeight, 0, random(-6, 6), 1, random(-4, 4));
 			A_SpawnProjectile("ShotgunParticles", BulletHeight, 0, random(-9, 9), 6, random(-9, 9));
 		}
 		A_SpawnProjectile("OrangeLensFlareAlt", FlareHeight, 10, 15, 0);
@@ -124,6 +124,10 @@ Class PB_ShotgunGuy : PB_Monster
 				A_GiveInventory("ShotgunSelected", 1);
 			}
 		Stand:
+			TNT1 A 0 {
+				bNoPain = false;
+				A_SetRoll(0);
+			}
 			SHID AABB 10 A_Look();
 			TNT1 A 0 A_Jump(32, "Stand2");
 			Loop;
@@ -134,17 +138,26 @@ Class PB_ShotgunGuy : PB_Monster
 			TNT1 A 0 {
 				A_TakeInventory("SKShotgunGuy", 1);
 				EnemyLastSighted = Level.MapTime;
+				
+				bNoPain = false;
+				A_SetRoll(0);
 			}
 		SeeContinue:
-			SPOS AABB 2 A_SmartChase();
+			SPOS A 1 A_SmartChase("Missile", "Melee", 0);
+			SPOS AAAAA 1 A_SmartChase(null, null, CHF_DONTTURN);
+			SPOS B 1 A_SmartChase("Missile", "Melee", 0);
+			SPOS BBBB 1 A_SmartChase(null, null, CHF_DONTTURN);
 			TNT1 A 0 A_StartSound("humans/step");
-			SPOS CCDD 2 A_SmartChase();
+			SPOS C 1 A_SmartChase("Missile", "Melee", 0);
+			SPOS CCCCC 1 A_SmartChase(null, null, CHF_DONTTURN);
+			SPOS D 1 A_SmartChase("Missile", "Melee", 0);
+			SPOS DDDDD 1 A_SmartChase(null, null, CHF_DONTTURN);
 			TNT1 A 0 A_StartSound("humans/step");
-			TNT1 A 0 A_JumpIfInventory("Wandering",16,"LookAround");
+			TNT1 A 0 A_JumpIf(CountInv("Wandering") == 71 && !OnPatrol,"LookAround");
 			Loop;
 		LookAround:
 			TNT1 A 0 A_ClearTarget();
-			TNT1 A 0 A_TakeInventory("Wandering", 36);
+			TNT1 A 0 A_TakeInventory("Wandering", 71);
 			TNT1 A 0 A_Jump(200, 2);
 			TNT1 A 0 A_StartSound("monsters/zombie/searching", CHAN_AUTO);
 			SHID ABACAD 10 A_Look();
@@ -200,8 +213,11 @@ Class PB_ShotgunGuy : PB_Monster
 		////////////////
 		Melee:
 			SHGM A 6 A_FaceTarget();
-			TNT1 A 0 A_StartSound("skeleton/swing");
-			TNT1 A 0 A_SpawnProjectile("ZombieBashAttack",10,0,0,0);
+			TNT1 A 0 {
+				A_StartSound("skeleton/swing");
+				A_CustomMeleeAttack(random(1, 8) * 4, "AxeHit", "", "Normal");
+			}
+			//TNT1 A 0 A_SpawnProjectile("ZombieBashAttack",10,0,0,0);
 			SHGM B 6 A_FaceTarget();
 			SHGM A 6;
 			Goto See;
@@ -664,12 +680,14 @@ Class PB_ShotgunGuy : PB_Monster
 		RollL:
 			TNT1 A 0 A_WallCheck(2, "RollLNow", "See");
 		RollLNow:
-			ZRO3 AA 1 A_FaceTarget;
+			TNT1 AAA 0 A_FaceTarget(0);
+			ZRO3 A 1 A_FaceTarget(0);
 			TNT1 A 0
 			{
-				ThrustThing(angle * 256 / 360 + 192, 15, 0, 0);
+				ThrustThing(angle * 256 / 360 + 192, 13, 0, 0);
 				//Play the Roll sound
 				bNoPain = true;
+				bNODROPOFF = true;
 			}
 			ZRO3 AAAAAAAAAAAAAAAA 1 A_SetRoll(roll+22, SPF_INTERPOLATE);
 			ZRO3 A 1
@@ -677,18 +695,21 @@ Class PB_ShotgunGuy : PB_Monster
 				//A_Stop();
 				A_SetRoll(0);
 				bNoPain = false;
+				bNODROPOFF = false;
 			}
 			ZRO3 A 1;
 			goto See;
 		RollR:
 			TNT1 A 0 A_WallCheck(2, "RollLNow", "See");
 		RollRNow:
-			ZRO4 AA 1 A_FaceTarget;
+			TNT1 AAA 0 A_FaceTarget(0);
+			ZRO4 A 1 A_FaceTarget(0);
 			TNT1 A 0
 			{
-				ThrustThing(angle * 256 / 360 + 64, 15, 0, 0);
+				ThrustThing(angle * 256 / 360 + 64, 13, 0, 0);
 				//Play the Roll sound
 				bNoPain = true;
+				bNODROPOFF = true;
 			}
 			ZRO4 AAAAAAAAAAAAAAAA 1 A_SetRoll(roll-22, SPF_INTERPOLATE);
 			ZRO4 A 1
@@ -696,6 +717,7 @@ Class PB_ShotgunGuy : PB_Monster
 				//A_Stop();
 				A_SetRoll(0);
 				bNoPain = false;
+				bNODROPOFF = true;
 			}
 			ZRO4 A 1;
 			goto See;
@@ -748,6 +770,8 @@ Class PB_ShotgunGuy : PB_Monster
 			Stop;
 			
 		Death:
+			TNT1 A 0;
+			TNT1 A 0 A_SetRoll(0);
 			TNT1 A 0 A_JumpIfInventory("IsProning",1, "DeathProne");
 			//TNT1 A 0 A_Jump(32, "Death.Arm");
 			TNT1 A 0 A_DeathWepCheck("ShotgunSelected", 400, "Death.Shotgun");
@@ -811,6 +835,8 @@ Class PB_ShotgunGuy : PB_Monster
 
 		Death.ArmHitbox:
 		Death.Arm:
+			TNT1 A 0;
+			TNT1 A 0 A_SetRoll(0);
 			TNT1 A 0 {
 				A_SpawnProjectile ("PB_XDeathArm1", 35, 0, random (0, 360), CMF_AIMDIRECTION|CMF_ABSOLUTEPITCH|CMF_OFFSETPITCH|CMF_BADPITCH|CMF_SAVEPITCH  , random (0, 160));
 				A_SpawnProjectile ("PB_SmallGib", 35, 0, random (0, 360), CMF_AIMDIRECTION|CMF_ABSOLUTEPITCH|CMF_OFFSETPITCH|CMF_BADPITCH|CMF_SAVEPITCH  , random (0, 160));
@@ -825,6 +851,8 @@ Class PB_ShotgunGuy : PB_Monster
 			
         Death.Saw:
 		Death.Cut:
+			TNT1 A 0;
+			TNT1 A 0 A_SetRoll(0);
 			TNT1 A 0 A_Jump(132, "DeathSaw2");
 			TNT1 O 0 A_NoBlocking();
 			SXD1 AAABBBCCCDDD 1  A_SpawnProjectile ("Brutal_LiquidBlood2", random(28, 34), 0, random (0, 360), CMF_AIMDIRECTION|CMF_ABSOLUTEPITCH|CMF_OFFSETPITCH|CMF_BADPITCH|CMF_SAVEPITCH  , random (30, 60));
@@ -866,6 +894,8 @@ Class PB_ShotgunGuy : PB_Monster
 			Goto Death.Minigun;
 			
 		 Death.Minigun:
+			TNT1 A 0;
+			TNT1 A 0 A_SetRoll(0);
 			TNT1 A 0 A_FaceTarget();
 			TNT1 A 0 A_Scream();
 			TNT1 O 0 A_NoBlocking();
@@ -873,6 +903,8 @@ Class PB_ShotgunGuy : PB_Monster
 			Stop;
 			
 		 Death.LegMassacre:
+			TNT1 A 0;
+			TNT1 A 0 A_SetRoll(0);
 			TNT1 A 0 A_SpawnProjectile ("PB_MuchBlood2", 15, 0, random (0, 360), CMF_AIMDIRECTION|CMF_ABSOLUTEPITCH|CMF_OFFSETPITCH|CMF_BADPITCH|CMF_SAVEPITCH  , random (0, 160));
 			TNT1 A 0 A_Scream();
 			TNT1 A 0 A_NoBlocking();
@@ -880,6 +912,8 @@ Class PB_ShotgunGuy : PB_Monster
 			Stop;
 
 		Death.Tear:
+			TNT1 A 0;
+			TNT1 A 0 A_SetRoll(0);
 			TNT1 A 0 A_XScream();
 			TNT1 O 0 A_NoBlocking();
 			TNT1 A 0 A_SpawnProjectile ("PB_MuchBlood", 1, 0, random (0, 360), CMF_AIMDIRECTION|CMF_ABSOLUTEPITCH|CMF_OFFSETPITCH|CMF_BADPITCH|CMF_SAVEPITCH  , random (0, 160));
@@ -899,6 +933,8 @@ Class PB_ShotgunGuy : PB_Monster
 
 		Death.HeadHitbox:
 		Death.Head:
+			TNT1 A 0;
+			TNT1 A 0 A_SetRoll(0);
 			TNT1 A 0 A_FaceTarget();
 			TNT1 A 0 A_JumpIfInTargetInventory("HasIncendiaryWeapon",1,"Death.Incinerate");
 			TNT1 A 0 A_JumpIfInTargetInventory("HasPlasmaWeapon", 1, "Death.Plasma");
@@ -931,7 +967,7 @@ Class PB_ShotgunGuy : PB_Monster
 			Stop;
 		DeathMinorHead1_Long:
 			TNT1 A 0 A_NoBlocking();
-			TNT1 A 0 A_SpawnItem("DyingShotgunguyHitInEye");
+			TNT1 A 0 A_SpawnItemEx ("DyingShotgunguyHitInEye", 0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0);
 			Stop;
 		DeathMinorHead2:
 			TNT1 AAAA 0 A_SpawnProjectile ("PB_BloodMist", 50, 0, random (0, 360), CMF_AIMDIRECTION|CMF_ABSOLUTEPITCH|CMF_OFFSETPITCH|CMF_BADPITCH|CMF_SAVEPITCH  , random (0, 360));
@@ -950,7 +986,7 @@ Class PB_ShotgunGuy : PB_Monster
 			Stop;
 		DeathMinorHead2_Long:
 			TNT1 A 0 A_NoBlocking();
-			TNT1 A 0 A_SpawnItem("DyingShotgunguyHitInEye2");
+			TNT1 A 0 A_SpawnItemEx ("DyingShotgunguyHitInEye2", 0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0);
 			Stop;
 				
 		DeathMinorhead3:
@@ -1026,6 +1062,8 @@ Class PB_ShotgunGuy : PB_Monster
 			Stop;
 		
 		Death.Decapitate:
+			TNT1 A 0;
+			TNT1 A 0 A_SetRoll(0);
 			TNT1 A 0 {
 				A_Stop();
 				A_FaceTarget();
@@ -1050,6 +1088,8 @@ Class PB_ShotgunGuy : PB_Monster
 		
 		Death.LegHitbox:
 		Death.Leg:
+			TNT1 A 0;
+			TNT1 A 0 A_SetRoll(0);
 			TNT1 A 0 A_JumpIfHealthLower(-120,"DoubleLegRemove");
 			TNT1 A 0 {
 				A_SpawnProjectile ("PB_MuchBlood2", 15, 0, random (0, 360), CMF_AIMDIRECTION|CMF_ABSOLUTEPITCH|CMF_OFFSETPITCH|CMF_BADPITCH|CMF_SAVEPITCH  , random (0, 160));
@@ -1065,8 +1105,8 @@ Class PB_ShotgunGuy : PB_Monster
 			SPO3 C 6 ;
 			TNT1 A 0 {
 				A_StartSound("BODYF",6);
-				A_SpawnItem("SergeantGotHisLegBlowed");
-				}
+				A_SpawnItemEx ("SergeantGotHisLegBlowed", 0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0);
+			}
 			Stop;
 		DoubleLegRemove:
 			TNT1 A 0 {
@@ -1106,7 +1146,7 @@ Class PB_ShotgunGuy : PB_Monster
 			Goto XDeath;
 		
 		BlownAwayLeft:	
-			//TNT1 A 0 //A_Jump(96, "Death.Landmine")
+			//TNT1 A 0 //A_Jump(96, "Dead.LandMine")
 			TNT1 A 0 {
 				A_Xscream();
 				A_NoBlocking();
@@ -1193,8 +1233,10 @@ Class PB_ShotgunGuy : PB_Monster
 			
 		  Death.SuperPunch:
 		  Death.ExtremePunches:
+			TNT1 A 0;
+			TNT1 A 0 A_SetRoll(0);
 			TNT1 A 0 {bNODROPOFF = False;}
-			TNT1 A 0 A_Jump(96,"Death.LandMine");
+			//TNT1 A 0 A_Jump(96,"Dead.LandMine");
 			TNT1 A 0 A_NoBlocking();
 			TNT1 A 0 {bNOBLOCKMONST = True;}
 			TNT1 A 0 A_SpawnProjectile ("PB_XDeath1", 32, 0, random (0, 360), CMF_AIMDIRECTION|CMF_ABSOLUTEPITCH|CMF_OFFSETPITCH|CMF_BADPITCH|CMF_SAVEPITCH  , random (0, 160));
@@ -1257,6 +1299,8 @@ Class PB_ShotgunGuy : PB_Monster
 			
 		Death.Plasma: 
 		Death.Plasma2:
+			TNT1 A 0;
+			TNT1 A 0 A_SetRoll(0);
 			TNT1 A 0 A_Stop();
 			TNT1 A 0 A_StartSound("plasmaflesh");
 			TNT1 A 0 A_SpawnItemEx("RealisticFireSparks1Blue",random(-2,2),random(-2,2),18,0,0,0,0,SXF_NOCHECKPOSITION  ,0);
@@ -1277,6 +1321,8 @@ Class PB_ShotgunGuy : PB_Monster
 			Stop;
 			
 		Death.SuperPlasma:
+			TNT1 A 0;
+			TNT1 A 0 A_SetRoll(0);
 			TNT1 A 0 {
 				A_FaceTarget();
 				A_XScream();
@@ -1299,6 +1345,8 @@ Class PB_ShotgunGuy : PB_Monster
 			
 			
 		Death.GreenFire:
+			TNT1 A 0;
+			TNT1 A 0 A_SetRoll(0);
 			TNT1 A 0 {
 				A_FaceTarget();
 				A_XScream();
@@ -1321,6 +1369,8 @@ Class PB_ShotgunGuy : PB_Monster
 			Stop;
 			
 		Death.Incinerate:
+			TNT1 A 0;
+			TNT1 A 0 A_SetRoll(0);
 			TNT1 A 0 {
 				A_Stop();
 				A_NoBlocking();
@@ -1372,6 +1422,8 @@ Class PB_ShotgunGuy : PB_Monster
 		Death.Melee:
 			TNT1 A 0 A_JumpIfInventory ("IsDown", 1, "Death.Down");
         Death.Kick:
+			TNT1 A 0;
+			TNT1 A 0 A_SetRoll(0);
 			TNT1 A 0 {
 				bNODROPOFF = False;
 				bSLIDESONWALLS = true;
@@ -1389,6 +1441,8 @@ Class PB_ShotgunGuy : PB_Monster
 	
 	   Death.Trample:	
 	   Death.Down:
+			TNT1 A 0;
+			TNT1 A 0 A_SetRoll(0);
 			TNT1 A 0 {
 				A_Scream();
 				A_Stop();
@@ -1403,6 +1457,8 @@ Class PB_ShotgunGuy : PB_Monster
 			TNT1 A 0 A_SpawnItem("DeadShotgunguy");
 			Stop;
 		Death.Shotgun:
+			TNT1 A 0;
+			TNT1 A 0 A_SetRoll(0);
 			TNT1 A 0 A_Jump(42, "Death.Shotgunontheface");
 			TNT1 A 0 A_JumpIfCloser(80, "Death.Blast");
 			TNT1 A 0 A_JumpIfCloser(320, "Death.Shotgunontheface");
@@ -1496,6 +1552,8 @@ Class PB_ShotgunGuy : PB_Monster
 			Stop;
 	
 		Death.Nailgun:
+			TNT1 A 0;
+			TNT1 A 0 A_SetRoll(0);
 			TNT1 A 0 A_Jump(256,
 				"Naildeath1", "Naildeath1",
 				"Naildeath2", "Naildeath2",
@@ -1579,8 +1637,10 @@ Class PB_ShotgunGuy : PB_Monster
 			Stop;
 		
 	Death.Railgun:
-			TNT1 A 0 A_Jump(96, "Death.SSG");
-		Death.Blast:
+		TNT1 A 0 A_Jump(96, "Death.SSG");
+	Death.Blast:
+		TNT1 A 0;
+		TNT1 A 0 A_SetRoll(0);
 		TNT1 A 0 A_FaceTarget();
 		TNT1 A 0 A_Jump(12, "Death.Arm");
 		TNT1 A 0 A_Jump(128, "Death.Blast2");
@@ -1619,7 +1679,9 @@ Class PB_ShotgunGuy : PB_Monster
 	    Stop;
 		
 	Death.Blast2:
-	TNT1 A 0 A_NoBlocking();
+		TNT1 A 0;
+		TNT1 A 0 A_SetRoll(0);
+		TNT1 A 0 A_NoBlocking();
 		TNT1 A 0 {
 			A_XScream();
 			NashGoreGibs.SpawnGibs(self);
@@ -1661,7 +1723,9 @@ Class PB_ShotgunGuy : PB_Monster
 	    Stop;
 	
 	Death.SSG:
-	    ZZD1 E 1 {
+	    TNT1 A 0;
+		TNT1 A 0 A_SetRoll(0);
+		ZZD1 E 1 {
 				ThrustThing(angle * 256 / 360 + 128, 22, 0, 0);
 				A_FaceTarget();
 				NashGoreGibs.SpawnGibs(self);

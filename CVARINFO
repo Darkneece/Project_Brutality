@@ -69,9 +69,6 @@ user bool cl_MoveTilt = true;
 server float fs_volume_mul = 1.0;
 server float fs_delay_mul = 1.0;
 
-//Fatalities
-server float cl_fatalityspeed = 1.0;
-
 //Footsteps
 user float cl_step_volmul = 7.0;
 user float cl_step_delaymul = 1.0;
@@ -228,6 +225,7 @@ user int pb_UpgradeShotgun = 0;
 user int pb_UpgradeNailgun = 0;
 user int pb_UpgradePlasma = 0;
 user int pb_UpgradeGL = 0;
+user int pb_UpgradeLMG = 1; // ¯\_(ツ)_/¯
 
 user int pb_SGAltAmmoSwap = 0;
 user int pb_SGPumpFromHip = 0;
@@ -500,8 +498,14 @@ user bool pb_hideunusedtypes = true;
 user float pb_hudalpha = 1.0;
 user float pb_hudboxalpha = 1.0;
 user bool pb_showammolist = true;
-user float pb_messagesize = 0.6;
+user float pb_messagesize = 1.0;
 nosave user bool pb_newmugshot = true;
+user bool pb_showblooddrops = true;
+user float pb_blooddropsalpha = 0.5;
+user bool pb_showglasscracks = true;
+user float pb_glasscracksalpha = 0.5;
+
+nosave server bool pbcv_inter = true;
 
 // Spawner Stuff
 // MapsBeatenCounter

@@ -13,116 +13,90 @@ ClearSkills
 
 Skill baby
 {
-   AmmoFactor = 2
-   DamageFactor = 0.5
-   MonsterHealth = 0.5
-   EasyBossBrain
-   SlowMonsters
-   SpawnFilter = Baby
-   Textcolor = Green
-   //DisableCheats
-   Name = "Power Fantasy"
-   MustConfirm = "The recommended difficulty for the dead. Press Y to Continue or N to Select another Skill level."
+	AmmoFactor = 1
+	DamageFactor = 0.25
+	MonsterHealth = 0.5
+	EasyBossBrain
+	SlowMonsters
+	EasyKey
+	TotalInfighting
+	PlayerRespawn
+	SpawnFilter = easy
+	Textcolor = Blue
+	Name = "I'm Too Young To Die!"
+	MustConfirm = "Infant\
+	---\
+	50% Enemy Health Reduction\
+	75% Damage Resistance\
+	\
+	Keys are visible in Automap\
+	Player respawning is enabled\
+	---\
+	Tourist mode."
 }
 
 Skill easy
 {
-   AmmoFactor = 1
-   DamageFactor = 0.75
-   MonsterHealth = 0.75
-   SpawnFilter = Easy
-   Textcolor = Green
-   //DisableCheats
-   Name = "Can I Play Daddy?"
-   MustConfirm = "The recommended difficulty for kids. Press Y to Continue or N to Select another Skill level."
+	MonsterHealth = 0.75
+	DamageFactor = 0.75
+	SpawnFilter = normal
+	Textcolor = Cyan
+	Name = "Hey, Not Too Rough."
+	MustConfirm = "Easy\
+	---\
+	25% Damage Resistance\
+	25% Enemy Health Reduction\
+	---\
+	The difficulty to learn the ropes."
 }
 
 Skill normal
 {
-   AmmoFactor = 1
-   DamageFactor = 0.90
-   MonsterHealth = 0.90
-   SpawnFilter = Normal
-   Textcolor = Gold
-   //DisableCheats
-   Name = "Harsh"
-   MustConfirm = "The recommended difficulty for newcomers to Project Brutality. Press Y to Continue or N to Select another Skill level."
+	DefaultSkill
+	SpawnFilter = Hard
+	Textcolor = Green
+	Name = "Hurt Me Plenty."
+	MustConfirm = "Normal\
+	---\
+	Stock game balance\
+	---\
+	The baseline intended difficulty."
 }
 
 Skill Hard
 {
-   AmmoFactor = 1
-   DamageFactor = 1.0
-   SpawnFilter = Hard
-   Textcolor = Yellow
-   //DisableCheats
-   Name = "Brutal"
-   MustConfirm = "The true Project Brutality experience. Press Y to Continue or N to Select another Skill level."
-}
-
-Skill VeryHard
-{
-   AmmoFactor = 1
-   DamageFactor = 1.0
-   MonsterHealth = 1.25
-   SpawnFilter = Hard
-   Textcolor = Yellow
-   //DisableCheats
-   Name = "More Brutal"
-   MustConfirm = "More monster health. Press Y to Continue or N to Select Other Skill."
-}
-
-Skill Brutal
-{  
-   AmmoFactor = 1
-   DamageFactor = 1.25
-   SpawnFilter = Nightmare
-   Aggressiveness = 0.10
-   //DisableCheats
-   Textcolor = "Orange"
-   Name = "Man and a Half"
-   MustConfirm = "Your enemies are significantly more aggressive, inflict more damage, and are very proficient. Press Y to Continue or N to Select another Skill level."
-
-}
-
-Skill Superbad
-{
-   AmmoFactor = 1
-   DamageFactor = 1.0
-   FastMonsters
-   SpawnFilter = Nightmare
-   Textcolor = "Dark Red"
-   //DisableCheats
-   Name = "12 on 10 Point Scale of Bad"
-   MustConfirm = "Your enemies are significantly faster. Press Y to Continue or N to Select another Skill level."
-}
-
-Skill BlackMetal
-{
-   AmmoFactor = 1
-   DamageFactor = 1.25
-   MonsterHealth = 1.20
-   SpawnFilter = Nightmare
-   Aggressiveness = 0.15
-   //DisableCheats
-   Name = "I AM THE PAINKILLER!!!"
-   Textcolor = "Reddish Brick"
-   MustConfirm = "Your enemies have 20% more health, are extremely aggressive, and inflict more damage.  Press Y if you can take it!"
+	DamageFactor = 1.2
+	Aggressiveness = 0.25
+	SpawnFilter = Hard
+	Textcolor = Yellow
+	Name = "Ultra-Violence."
+	MustConfirm = "Hard\
+	---\
+	20% More Damage\
+	25% More Aggressive Monsters\
+	---\
+	The true Project Brutality experience for skilled players."
 }
 
 Skill HELL
 {
-   AmmoFactor = 1
-   DamageFactor = 1.50
-   MonsterHealth = 1.20
-   FastMonsters
-   Aggressiveness = 0.20
-   SpawnFilter = Nightmare
-   Textcolor = Red
-   //DisableCheats
-  // PicName = "M_NMARE"
-   name = "Last Man on Earth"
-   mustconfirm = "The monsters you will face came straight out of the depths of hell. You will learn to fear and respect what true terror is. Press Y to start your death wish."
+	DamageFactor = 1.5
+	MonsterHealth = 1.50
+	InstantReaction
+	Aggressiveness = 0.5
+	SpawnFilter = Nightmare
+	Textcolor = Red
+	name = "NIGHTMARE!"
+	mustconfirm = "Nightmare\
+	---\
+	50% More Aggressive Monsters\
+	50% More Enemy Health\
+	50% More Damage\
+	Monsters React Instantly\
+	\
+	No Enemy Respawns\
+	---\
+	Fuck you."
 }
 
 
@@ -130,13 +104,20 @@ GameInfo
 {
 	PrecacheClasses = "BlackHole"
 	StatusBarClass = "PB_Hud_ZS"
+	StatScreen_Single = "PB_DoomStatusScreen"
 	DimColor = "Black"
 	DimAmount = 0.70
 	NoRandomPlayerClass = True
-	AddEventHandlers = "PB_ExecutionHandler", "PB_PDAHandler", "PB_EventHandler", "MBlurHandler", "NashGoreHandler", "TiltPlusPlusHandler", "DEDashJumpHandler", "SpeedoMeterHandler", "WallSlideHandler", "PB_SpecialWheelHandler"
+	AddEventHandlers = "PB_ExecutionHandler", "PB_HudFXHandler", "PB_EventHandler", "MBlurHandler", "NashGoreHandler", "TiltPlusPlusHandler", "DEDashJumpHandler", "SpeedoMeterHandler", "WallSlideHandler", "PB_SpecialWheelHandler"
 	NormForwardMove = 0x32, 0x32		//Walk speed is modulated through
 	NormSideMove = 0x32, 0x32			//CVar in the menu options
 	AddEventHandlers = "UnmakerStuff"
+	
+	/*Intro
+	{
+		Video = "Graphics/videos/pbopening.ivf"
+		Sound = "Graphics/videos/pbopening.ogg"
+	}*/
 }
 
 //[inkoalawetrust] These are all the editor numbers Project Brutality's custom actors use.

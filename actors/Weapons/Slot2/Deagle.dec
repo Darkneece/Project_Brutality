@@ -51,19 +51,15 @@ ACTOR PB_Deagle : PB_Weapon
 	+DONTGIB
 	Obituary "%o was popped by %k's .50 Caliber Hand Cannon."
     Inventory.PickupSound "weapons/deagle/equip"
-	Inventory.Pickupmessage "You found the UAC .50 Caliber Hand Cannon! (Slot 2, Upgrade)"
+	Inventory.Pickupmessage "UAC .50 Caliber Hand Cannon (Slot 2, Upgrade)"
 	Tag "Desert Eagle .50"
-    +WEAPON.NOAUTOAIM
+	+WEAPON.NOAUTOAIM
     +WEAPON.NOALERT
     +WEAPON.NOAUTOFIRE
-	+POWERED_UP
+	//+POWERED_UP
 	+WEAPON.CHEATNOTWEAPON
-	Weapon.BobRangeX 0.3
-	Weapon.BobRangeY 0.5
-	Weapon.BobStyle InverseSmooth
-	Weapon.BobSpeed 2.4
     Scale 0.48
-	Weapon.SisterWeapon PB_Revolver
+	//Weapon.SisterWeapon PB_Revolver
 	PB_WeaponBase.UnloaderToken "DeagleHasUnloaded"
 	Inventory.AltHUDIcon "D4E0Z0"
 	PB_WeaponBase.respectItem "RespectDeagle"
@@ -116,6 +112,7 @@ ACTOR PB_Deagle : PB_Weapon
 			}
 		TNT1 A 0 A_JumpIfInventory("DualWieldingDeagles", 1, "ReadyDualWield")
 	ReadyToFire:
+		D4E0 E 0 A_TakeInventory("PB_Revolver", 2)
 		D4E0 E 1 {
 			if (PressingFire() && PressingAltfire() && CountInv("DeagleAmmo") > 0){
 					return state("Fire");
@@ -288,6 +285,7 @@ ACTOR PB_Deagle : PB_Weapon
 			PB_GunSmoke(4,0,0);
 			A_FireCustomMissile("DeagleCasingLeft",0,0,-12,-5);
 			A_PlaySoundEx("weapons/deagle/fire", "Weapon");
+			PB_LowAmmoSoundWarning("pistol", "LeftDeagleAmmo");
 			A_TakeInventory("PB_DeagleFireAnimation1",1);
 			A_Takeinventory("LeftDeagleAmmo",1);
 			A_GiveInventory("PB_DeagleFireAnimation2",1); //Toggle gun animation from one pistol to the other.
@@ -344,6 +342,7 @@ ACTOR PB_Deagle : PB_Weapon
 			PB_GunSmoke(-4,0,0);
 			A_FireCustomMissile("DeagleCasingRight",0,0,12,-5);
 			A_PlaySoundEx("weapons/deagle/fire", "Weapon");
+			PB_LowAmmoSoundWarning("pistol");
 			A_ZoomFactor(0.985);
 			A_Takeinventory("DeagleAmmo",1);
 			A_GiveInventory("PB_DeagleFireAnimation1",1); //Toggle gun animation from one pistol to the other.
@@ -492,6 +491,7 @@ ACTOR PB_Deagle : PB_Weapon
         Goto Reload
 		D2E0 A 1 BRIGHT {	
 				A_PlaySoundEx("weapons/deagle/fire", "Weapon");
+				PB_LowAmmoSoundWarning("pistol");
 				//A_FireBullets (0.1, 0.1, -1, 75, "HitPuff", FBF_NORANDOM,8192,"Tracer", -2,0);
 				A_FireProjectile("PB_50AE", frandom(-0.1,0.1),0,0,0, FPF_NOAUTOAIM, frandom(-0.1,0.1));
 				A_AlertMonsters;
@@ -534,6 +534,7 @@ ACTOR PB_Deagle : PB_Weapon
         Goto Reload
 		D3E0 B 1 BRIGHT {	
 				A_PlaySoundEx("weapons/deagle/fire", "Weapon");
+				PB_LowAmmoSoundWarning("pistol");
 				//A_FireBullets (0.1, 0.1, -1, 75, "HitPuff", FBF_NORANDOM,8192,"Tracer", -2,0);
 				A_FireProjectile("PB_50AE", frandom(-0.1,0.1),0,0,0, FPF_NOAUTOAIM, frandom(-0.1,0.1));
 				A_AlertMonsters;
@@ -597,6 +598,7 @@ ACTOR PB_Deagle : PB_Weapon
 			A_FireCustomMissile("GunFireSmoke", 0, 0, 4, 0, 0, 0);
 			A_FireCustomMissile("DeagleCasingRight",0,0,12,-5);
 			A_PlaySoundEx("weapons/deagle/fire", "Weapon");
+			PB_LowAmmoSoundWarning("pistol");
 			A_ZoomFactor(0.985);
 			A_Takeinventory("DeagleAmmo",1);
 			A_GiveInventory("PB_DeagleFireAnimation1",1); //Toggle gun animation from one pistol to the other.

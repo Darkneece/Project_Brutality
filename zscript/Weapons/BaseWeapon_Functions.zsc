@@ -1,6 +1,39 @@
 extend class PB_WeaponBase
 {
-    action void PB_UseLine(int range = 64)
+	action void PB_LowAmmoSoundWarning(string type = "default", string ammoItem = "SuperMario64ForTheXboxOne")
+	{
+		Ammo count;
+		if(ammoItem == "SuperMario64ForTheXboxOne")
+			count = invoker.ammo2;
+		else
+			count = Ammo(FindInventory(ammoItem));
+			
+		if(!count)
+		{
+			console.printf("PB_LowAmmoSoundWarning: Invalid ammo class");
+			return;
+		}
+		
+		int lowammocount = ceil(count.maxamount * 0.25);
+		int currentammocount = count.amount;
+
+		sound sndName = "weapons/lowammo/"..type;
+		
+		if(currentammocount <= lowammocount)
+		{
+			double clickvolume = PB_Math.LinearMap(currentammocount, 1.0, lowammocount, 1.0, 0.5);
+			A_StartSound(sndName, CHAN_AUTO, CHANF_OVERLAP, clickvolume, ATTN_STATIC, frandompick(0.98, 1.0));
+			
+			if(currentammocount == 1)
+				A_StartSound("weapons/lowammo/sweetener", CHAN_AUTO, CHANF_OVERLAP, 1.0, ATTN_STATIC);
+			
+			//console.printf("%f %i %i", clickvolume, lowammocount, currentammocount);
+			if(currentammocount == 0)
+				console.printf("PB_LowAmmoSoundWarning: Ammo count is 0 instead of 1, was the function called after the ammo item was taken?");
+		}
+	}
+	
+	action void PB_UseLine(int range = 64)
     {
         double pz = height * 0.5 - floorclip + player.mo.AttackZOffset*player.crouchFactor;
         FLineTraceData ltd;
@@ -11,16 +44,21 @@ extend class PB_WeaponBase
         }
     }
     
-    action void PB_FireOffset(bool interp = true) {
+    action void PB_FireOffset(bool interp = true) 
+	{
 		if( !cvar.GetCVar("PB_ExaggeratedRecoil", invoker.owner.player).GetBool() )
 			return;
+
 		invoker.exaggerationMultiplier = cvar.GetCVar("PB_ExaggeratedRecoilMul", invoker.owner.player).GetFloat();
-		if(invoker.exaggerationMultiplier == 0) {
+		
+		if(invoker.exaggerationMultiplier == 0) 
+		{
 			invoker.exaggerationMultiplier = 0.1;
 		}
 		
 		A_WeaponOffset(frandom(-invoker.horizontalOffsetRecoil, invoker.horizontalOffsetRecoil) * invoker.exaggerationMultiplier, frandom(1, invoker.verticalOffsetRecoil) * invoker.exaggerationMultiplier + 32, WOF_INTERPOLATE);
 		A_SetRoll(roll + frandom(-invoker.horizontalOffsetRecoil, invoker.horizontalOffsetRecoil) * invoker.exaggerationMultiplier, SPF_INTERPOLATE);
+		PB_QuakeCamera(2,3);
 	}
 	
 	action bool PB_ChainsawHealthRestore(){
@@ -225,6 +263,11 @@ extend class PB_WeaponBase
 		{
 			GunBraced = false;
 			return;
+		}
+		
+		if (CountInv("ResetZoom") >= 1) {
+			A_TakeInventory("ResetZoom", 1);
+			A_ZoomFactor(1.0, ZOOM_INSTANT);
 		}
 		
 		FLineTraceData dt1, dt2, dt3, dt4, dt5, dt6;
@@ -553,6 +596,7 @@ extend class PB_WeaponBase
 	}
 	
 	action state PB_Execute() {
+		if(CountInv("GrabbedBarrel") >= 1 || CountInv("GrabbedFlameBarrel") >= 1 || CountInv("GrabbedIceBarrel") >= 1) { return null; }
 	
 //         CVar experimental_settings = CVar.FindCVar('pb_experimental');
 		
@@ -714,7 +758,7 @@ extend class PB_WeaponBase
 			}
 		}
 		
-		
+	
 	//[Pop] This is a hack, ideally we shouldnt have to do this and once weapons are fully ZScript each one
 	//will have its own function for firing that gets called. Even after it may be good to keep this for 
 	//weapon addons that stay in DECORATE. Thanks to ADMERAL for throwing this together.
@@ -724,6 +768,17 @@ extend class PB_WeaponBase
 		{
 			A_FireProjectile(type,(frandom(angle,angle * -1)),0,offs,height,FPF_NOAUTOAIM,(frandom(pitch,pitch * -1)));
 		}
+	}
+	
+	//[Pop]This function is so we can replace all of the shitty A_Quake or QuakeEx
+	//whatever the fucks in the mod, ESPECIALLY on the weapon front
+	//no more of these SHAKEYOURASSMINOR and SHAKEYOURASSMAJOR actor spawning garbage
+	//its pretty bare bones but maybe we can extend it in the future if we need it
+	action void PB_QuakeCamera(int qDur, float camRoll)
+	{
+		A_QuakeEx(0, 0, 0, qDur, 0, 100, "", 0, 1, 0, 0, 0, 0, (camRoll / 2), 1, 0, 0, 0);
+		//also, camroll / 2, 2 should be made a scaling CVar at some point, or attach it to some other cvar
+		//DONT FORGET DIPSHIT
 	}
 	
 	//Checks if the owner has a berserk
@@ -758,12 +813,12 @@ extend class PB_WeaponBase
 		Super.AttachToOwner(other);
 		let toucher = other;
 		bool IsAlreadyPicked = false;
-		if (toucher.FindInventory("PB_PDAWeaponContainer",true))
+		/*if (toucher.FindInventory("PB_PDAWeaponContainer",true))
 		{
 			PB_PDAWeaponContainer pdaweapContainer = PB_PDAWeaponContainer(toucher.FindInventory("PB_PDAWeaponContainer",true));
 			pdaweapContainer.CollectedWeapons.Push(self.GetClassName());
 			EventHandler.SendNetworkEvent("Foundweapon:"..self.GetClassName());
-		}
+		}*/
 	}
 	
 	//Weapon token take away in one function
@@ -832,15 +887,6 @@ extend class PB_WeaponBase
 			A_SetInventory("sae_extcam", 0);
 			A_SetInventory("sae_deathcam", 0);
 			A_SetInventory(wepToken,1);
-			
-			if(pb_ScaleXWeapons)
-			{
-				invoker.WeaponScaleX = 1.2;
-			}
-			else
-			{
-				invoker.WeaponScaleX = 1;
-			}
 	}
 	
 	//Special Modes
@@ -934,7 +980,7 @@ extend class PB_WeaponBase
 		FrostBeam.Startroll =random(0,360); //randompick(0,90,180,270,360);
 		FrostBeam.RollVel = 0;
 		FrostBeam.StartAlpha = 0.90;
-		FrostBeam.FadeStep = -0.1;
+		FrostBeam.FadeStep = 0.1;
 		FrostBeam.Size = 20;
 		FrostBeam.SizeStep = 0;
 		FrostBeam.Lifetime = 1; 
@@ -1106,6 +1152,20 @@ extend class PB_WeaponBase
 	}
 	
 	
+	action bool PB_WeaponIsInSlidingState()
+	{
+		State PSPState = invoker.owner.player.GetPSprite(PSP_WEAPON).Curstate;
+		if (InStateSequence(PSPState,invoker.ResolveState("FlashSlideKicking"))||
+			InStateSequence(PSPState,invoker.ResolveState("FlashSlideKickingDW"))||
+			InStateSequence(PSPState,invoker.ResolveState("FlashSlideKicking2"))||
+			InStateSequence(PSPState,invoker.ResolveState("DualFlashSlideKicking"))||
+			InStateSequence(PSPState,invoker.ResolveState("FlashSlideKickingAkimbo"))||
+			InStateSequence(PSPState,invoker.ResolveState("FlashSlideKickingDualWield"))||
+			InStateSequence(PSPState,invoker.ResolveState("DualWieldFlashSlideKicking"))
+		) return true;
+		return false;
+	}
+	
 	action state A_DoPBWeaponAction(int weapflags = WRF_ALLOWRELOAD, int pbFlags = 0, string unloadtoken = "HasUnloaded", bool noReload = false)
 	{
 		static const string PBWeapEmptyToken[] = 
@@ -1181,11 +1241,35 @@ extend class PB_WeaponBase
 			}
 		}
 		
+		if (!noReload) {
+			noReload = ((PressingFire() || JustPressed(BT_ATTACK)) || (ResolveState("AltFire") && (PressingAltFire() || JustPressed(BT_ALTATTACK))));
+		}
+		
 		if (noReload) {
-			A_WeaponReady();
+			int newflags = WRF_NOSWITCH;
+			if (weapflags & WRF_NOBOB) { newflags = newflags | WRF_NOBOB; }
+			if (weapflags & WRF_NOFIRE) { newflags = newflags | WRF_NOFIRE; }
+			if (weapflags & WRF_NOPRIMARY) { newflags = newflags | WRF_NOPRIMARY; }
+			if (weapflags & WRF_NOSECONDARY) { newflags = newflags | WRF_NOSECONDARY; }
+			if (weapflags & WRF_ALLOWUSER1) { newflags = newflags | WRF_ALLOWUSER1; }
+			if (weapflags & WRF_ALLOWUSER2) { newflags = newflags | WRF_ALLOWUSER2; }
+			if (weapflags & WRF_ALLOWUSER3) { newflags = newflags | WRF_ALLOWUSER3; }
+			if (weapflags & WRF_ALLOWUSER4) { newflags = newflags | WRF_ALLOWUSER4; }
+			if (weapflags & WRF_DISABLESWITCH) { newflags = newflags | WRF_DISABLESWITCH; }
+			if (weapflags & WRF_ALLOWZOOM) { newflags = newflags | WRF_ALLOWZOOM; }
+			if (PB_usingKick()) { newflags = newflags | WRF_NOFIRE; }
+			A_WeaponReady(newflags);
 		}
 		else {
-			A_WeaponReady(weapflags);
+			if (PB_usingKick()) {
+				if (CountInv("IsSlideKicking") >= 1) {
+					A_WeaponReady(weapflags | WRF_NOFIRE | WRF_NOSWITCH);
+				} else {
+					A_WeaponReady(weapflags | WRF_NOSWITCH);
+				}
+			} else {
+				A_WeaponReady(weapflags);
+			}
 		}
 		return null;
 	}
@@ -1202,7 +1286,7 @@ extend class PB_WeaponBase
 		}
 	}
 	
-	//weapons should ALWAYS bob, fucking fight me -popguy
+	//[Pop]weapons should ALWAYS bob, fucking fight me
 	override void DoEffect()
 	{
 		super.DoEffect();
@@ -1210,6 +1294,15 @@ extend class PB_WeaponBase
 		if (player && player.readyweapon)
 		{
 			player.WeaponState |= WF_WEAPONBOBBING;
+		}
+		
+		if(pb_ScaleXWeapons)
+		{
+			WeaponScaleX = 1.2;
+		}
+		else
+		{
+			WeaponScaleX = 1;
 		}
 	}
 	
@@ -1347,22 +1440,14 @@ extend class PB_WeaponBase
 	action void PB_FireAltBFGRail()
 	{
 		//the first option is a lineattack cuz linetrace acts weird in some tipes of geometry (try one with the kinsie test map, in the elevator or the pool)
-		Actor p = LineAttack(angle,8000,pitch,20,'Disintegrate',"BFGBeamPuff",LAF_NOIMPACTDECAL|LAF_NORANDOMPUFFZ);
+		//Actor p = LineAttack(angle,8000,pitch,20,'Disintegrate',"BFGBeamPuff",LAF_NOIMPACTDECAL|LAF_NORANDOMPUFFZ);
+		//nvm just needed to substract hitdir to hitlocation, so it doesnt spawn in the wall
 		vector3 destpos;
+		FLineTraceData t;
+		bool hit = linetrace(angle,8000,pitch,0,height * 0.5 - floorclip + player.mo.AttackZOffset*player.crouchFactor,data:t);
 		
-		if(p) 
-		{
-			p.target = self;
-			destpos = (p.pos.XY,p.pos.z + p.height);
-		}
-		else //no puff spawned, probably fired at the sky, so fire a linetrace to draw the rail anyway
-		{
-			FLineTraceData t;
-			bool hit = linetrace(angle,8000,pitch,0,height * 0.5 - floorclip + player.mo.AttackZOffset*player.crouchFactor,data:t);
-			if(hit)
-				destpos = t.hitlocation;
-				
-		}
+		destpos = t.hitlocation;
+		destpos -= (t.hitdir * 2);
 		
 		vector3 dif = levellocals.vec3diff((pos.XY,pos.z + height * 0.5),destpos);
 		vector3 dir = dif.unit();
@@ -1375,6 +1460,24 @@ extend class PB_WeaponBase
 		{
 			actpos += (dir * bfgpartstep);
 			PB_DrawBFGrailparticle(actpos);
+		}
+		
+		//damage victim (if any)
+		if(t.hitactor)
+		{
+			actor v = t.hitactor;
+			int dmg = 40 * random(1,2); //so this is why it feels weaker, the original projectile deals 20 * random(1,8) damage, and damagemobj doesnt add randomization, so a little randomization may help here
+			if(v && v.bismonster && v.health > 0 && !isfriend(v))
+				v.damagemobj(self,self,dmg,'Disintegrate');
+		}
+		
+		//spawn puff if hit anything
+		if(hit)
+		{
+			actor p = Spawn("BFGBeamPuff",destpos);
+			if(p)
+				p.target = self;
+			
 		}
 
 	}
@@ -1391,7 +1494,7 @@ extend class PB_WeaponBase
 		bfgrail.Startroll = random(0,360);
 		bfgrail.RollVel = 0;
 		bfgrail.StartAlpha = 1.0;
-		bfgrail.FadeStep = -0.05;
+		bfgrail.FadeStep = 0.05;
 		bfgrail.Size = random(32,42);
 		bfgrail.SizeStep = -12;
 		bfgrail.Lifetime = random (2,3); 
@@ -1456,7 +1559,7 @@ extend class PB_WeaponBase
 		RedRailPx.RollVel = 0;
 		RedRailPx.StartAlpha = alfa;
 		//fadestep and lifetime controls how fast it dissappears
-		RedRailPx.FadeStep = BeamType ? (power >= 60 ? -0.08 : -0.15) : 0;
+		RedRailPx.FadeStep = BeamType ? (power >= 60 ? 0.08 : 0.15) : 0;
 		RedRailPx.Size = BeamType ? 60 : 12;
 		RedRailPx.SizeStep = 0.01;
 		RedRailPx.Lifetime = BeamType ? (power >= 60 ? random(15,17) : random(8,10)) : 1;  //i dislike chained ternary operators like this, but it is what it is
@@ -1538,7 +1641,7 @@ extend class PB_WeaponBase
 		BlueRailPx.Startroll = randompick(0,180);
 		BlueRailPx.RollVel = 0;
 		BlueRailPx.StartAlpha = 1.0;
-		BlueRailPx.FadeStep = -0.05;
+		BlueRailPx.FadeStep = 0.05;
 		BlueRailPx.Size = 50;
 		BlueRailPx.SizeStep = -2;
 		BlueRailPx.Lifetime = random(30,40); 
@@ -1557,7 +1660,7 @@ extend class PB_WeaponBase
 		BlueRailSmoke.Startroll = randompick(0,180);
 		BlueRailSmoke.RollVel = random(-2,2);
 		BlueRailSmoke.StartAlpha = 0.66;
-		BlueRailSmoke.FadeStep = -0.01;
+		BlueRailSmoke.FadeStep = 0.01;
 		BlueRailSmoke.Size = random(20,35);
 		BlueRailSmoke.SizeStep = -0.5;
 		BlueRailSmoke.Lifetime = random(70,105); 
@@ -1601,7 +1704,7 @@ extend class PB_WeaponBase
 		for(int i = 0; i < q; i++)
 		{
 			m2Lightpx.Size = random(20,30);
-			m2Lightpx.FadeStep = -0.02;
+			m2Lightpx.FadeStep = 0.02;
 			m2Lightpx.SizeStep = random(10,15);
 			m2Lightpx.Lifetime = random(5,8); 
 			m2Lightpx.Startroll = randompick(0,90,180,270,360);
@@ -1616,15 +1719,15 @@ extend class PB_WeaponBase
 				Level.SpawnParticle(m2Lightpx);
 		}
 		
+		if(t.hitactor != null)
+			t.hitactor.damagemobj(self,self,2,'electric');
 		//LightningGunPuff
 		if(hit)
 		{
 			actor p = Spawn("LightningGunPuff",fpos);
 			if(p)
-			{
-				p.A_Explode(random(12,15), 80); //tecnically this puff explodes 2 times 
 				p.target = self;
-			}
+			
 		}
 		spawn("BlueFlare",fpos);
 	}
@@ -1646,18 +1749,18 @@ extend class PB_WeaponBase
 		vector3 dif = levellocals.Vec3diff(spos,fpos);
 		vector3 dr = dif.unit();
 		double dis = dif.length();
-		int q = int(dis / railpartstepaim) + 1;
+		int q = int(dis / 40) + 1;
 		
 		FSpawnParticleParams UnmkBm;
 		string tx = overcharge ? "PBALK0" : "PBALJ0";
 		UnmkBm.Texture = TexMan.CheckForTexture(tx);
 		UnmkBm.Color1 = "FFFFFF";
 		UnmkBm.Style = overcharge ? STYLE_Add : STYLE_TRANSLUCENT;
-		UnmkBm.Flags = SPF_ROLL|SPF_FULLBRIGHT|SPF_NOTIMEFREEZE;
+		UnmkBm.Flags = SPF_ROLL|SPF_FULLBRIGHT;
 		UnmkBm.Vel = (0,0,0); 
 		UnmkBm.StartAlpha = 1.0;
-		UnmkBm.FadeStep = -0.05;
-		UnmkBm.Size = 20;
+		UnmkBm.FadeStep = 0.05;
+		UnmkBm.Size = randompick(25,35);
 		UnmkBm.SizeStep = -5;
 		UnmkBm.Lifetime = overcharge ? 2 : 1; 
 		
@@ -1667,7 +1770,7 @@ extend class PB_WeaponBase
 		{
 			UnmkBm.Startroll = randompick(0,360);
 			UnmkBm.RollVel = random(-5,5);
-			spos += (dr * railpartstepaim);
+			spos += (dr * 40);
 			if(randomizebeam)
 				spos += (random(-2,2),random(-2,2),random(-2,2));
 			UnmkBm.Pos = spos;
@@ -1690,7 +1793,10 @@ extend class PB_WeaponBase
 		}
 		
 		if(t.hitactor)
-			t.hitactor.damagemobj(p ? p : self, self, overcharge ? 25 : 15,overcharge ? "ExplosiveImpact" : "Fire");
+        {
+            t.hitactor.damagemobj(p ? p : self, self, overcharge ? 25 : 15,overcharge ? "ExplosiveImpact" : "Fire");
+            if(t.hitactor.bISMONSTER&&t.hitactor.health <=0&&CountInv("UnmakerOverchargeCounter")<50)
+                GiveInventory("UnmakerOverchargeCounter",1);
+        }
 	}
-	
 }
